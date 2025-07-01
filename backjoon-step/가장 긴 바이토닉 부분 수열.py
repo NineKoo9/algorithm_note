@@ -43,5 +43,26 @@ def solution2():
                 reverse_increase_dp[i] = max(reverse_increase_dp[i], reverse_increase_dp[j] + 1)
     print(max(list(map(lambda t: sum(t) - 1, zip(increase_dp, reverse_increase_dp)))))
 
+def solution3():
+    N = int(input())
+    A = list(map(int, input().split()))
+    
+    # 여기서부터 가장 긴 바이토닉 부분 수열을 구해야한다.
+    increase_dp = [1] * N
+    for i in range(N):
+        for j in range(i):
+            if A[j] < A[i]:
+                increase_dp[i] = max(increase_dp[i], increase_dp[j] + 1)
+            
+    decrease_dp = [1] * N
+    for i in range(N - 1, -1, -1):
+        for j in range(N - 1, i - 1, -1):
+            if A[j] < A[i]:
+                decrease_dp[i] = max(decrease_dp[i], decrease_dp[j] + 1)
+    
+    ans = 0
+    for i, j in zip(increase_dp, decrease_dp):
+        ans = max(ans, i + j - 1)
+    print(ans)
 
-solution2()
+solution3()
