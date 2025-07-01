@@ -53,6 +53,33 @@ def solution2():
 
     print(len(lis))
 
+def solution3():
+    def binary_search_lower_bound(lst, num):
+        lower = len(lst)
+        start = 0
+        end = len(lst) - 1
+        while start <= end:
+            mid = (start + end) // 2
+            if lst[mid] >= num:
+                lower = mid
+                end = mid - 1
+            else: # lst[mid] < num
+                start = mid + 1
+        return lower
+    
+    N = int(input())
+    A = list(map(int, input().split()))
+    
+    stack = []
+    for i in range(N):
+        # 현재 stack에서 A[i]가 들어갈 위치를 찾는다.
+        idx = binary_search_lower_bound(stack, A[i])
+        if idx == len(stack):
+            stack.append(A[i])
+        else:
+            stack[idx] = A[i]
+            
+    print(len(stack))
 
-solution2()
+solution3()
 # 자... 구현은 얼핏하긴했는데... 논리적인 이유부터 찾아보자
