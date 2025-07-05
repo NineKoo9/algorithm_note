@@ -44,4 +44,36 @@ def solution2():
     else:
         print(len(answer), answer, sep="\n")
 
-solution2()
+def solution3():
+    def get_text(u, v):
+        if u == 0 or v == 0:
+            return
+        
+        if A[u - 1] == B[v - 1]:
+            path.append(A[u - 1])
+            get_text(u - 1, v - 1)
+        elif dp[u - 1][v] > dp[u][v - 1]:
+            get_text(u - 1, v)
+        else:
+            get_text(u, v - 1)
+            
+    A = input()
+    B = input()
+    path = []
+    
+    len_a = len(A)
+    len_b = len(B)
+    dp = [[0] * (len_b + 1) for _ in range(len_a + 1)]
+    
+    for i in range(1, len_a + 1):
+        for j in range(1, len_b + 1):
+            if A[i - 1] == B[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    
+    print(dp[i][j])
+    get_text(len_a, len_b)
+    print(*path[::-1], sep="")
+
+solution3()
