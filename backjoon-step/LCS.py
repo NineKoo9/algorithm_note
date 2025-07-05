@@ -45,6 +45,27 @@ def solution3():
                 dp[i][j] = max(dp[i - 1][j] if i - 1 >= 0 else 0, dp[i][j - 1] if j - 1 >= 0 else 0)
     print(dp[len(A) - 1][len(B) - 1])
 
-
+def solution4():
+    A = input()
+    B = input()
+    
+    len_A = len(A)
+    len_B = len(B)
+    
+    dp = [[0] * len_B for _ in range(len_A)]
+    for i in range(len_A):
+        for j in range(len_B):
+            if A[i] == B[j]:
+                if i - 1 < 0 or j - 1 < 0:
+                    dp[i][j] = 1
+                else:
+                    dp[i][j] = max(dp[i][j], dp[i - 1][j - 1] + 1)
+            else:
+                dp[i][j] = max(dp[i - 1][j] if i - 1 >= 0 else 0, dp[i][j - 1] if j - 1 >= 0 else 0)
+    print(dp[len_A - 1][len_B - 1])
+                
+            
+    
+    
 
 solution3()
