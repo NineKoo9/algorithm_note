@@ -23,5 +23,28 @@ def solution2():
     for point in points:
         results.append(point_dic[point])
     print(*results)
-solution2()
+
+def solution3():
+    def binary_left(arr, n):
+        s = 0
+        e = len(arr) - 1
+        ans = len(arr)
+        while s <= e:
+            mid = (s + e) // 2
+            if arr[mid] < n:
+                s = mid + 1
+            else:  # mid >= n
+                ans = mid
+                e = mid - 1
+        return ans
+
+    N = int(input())
+    numbers = list(map(int, input().split()))
+
+    sorted_distinct_numbers = sorted(set(numbers))
+    compressed_points = [binary_left(sorted_distinct_numbers, num) for num in numbers]
+    print(*compressed_points)
+
+
+solution3()
 
