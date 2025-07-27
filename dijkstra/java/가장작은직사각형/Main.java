@@ -31,10 +31,18 @@ public class Main {
         int ysSize = ys.size();
 
         int[][] grid = new int[xsSize][ysSize];
+        Map<Integer, Integer> xValueIdxMap = new HashMap<>();
+        Map<Integer, Integer> yValueIdxMap = new HashMap<>();
+        for (int i = 0; i < xsSize; i++) {
+            xValueIdxMap.put(xs.get(i), i);
+        }
+        for (int i = 0; i < ysSize; i++) {
+            yValueIdxMap.put(ys.get(i), i);
+        }
 
         for (Point p : points) {
-            int xIdx = Collections.binarySearch(xs, p.x);
-            int yIdx = Collections.binarySearch(ys, p.y);
+            int xIdx = xValueIdxMap.get(p.x);
+            int yIdx = yValueIdxMap.get(p.y);
             grid[xIdx][yIdx] = 1;
         }
 
