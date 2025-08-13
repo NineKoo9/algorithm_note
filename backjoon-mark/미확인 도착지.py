@@ -43,7 +43,7 @@
 # def solution2():
 #     import heapq
 #
-#     def dijkstra(start):
+#     def tak_study(start):
 #         q = []
 #         dp = [int(1e9) for _ in range(vertex_n + 1)]
 #         dp[start] = 0
@@ -69,9 +69,9 @@
 #             graph[node2].append((node1, d))
 #         destination_candidates = [int(input()) for _ in range(dest_candi_n)]
 #         # 다익스트라를 구현하면 되겠다.
-#         min_dist = dijkstra(s)
-#         min_dist_start_g = dijkstra(point_g)
-#         min_dist_start_h = dijkstra(point_h)
+#         min_dist = tak_study(s)
+#         min_dist_start_g = tak_study(point_g)
+#         min_dist_start_h = tak_study(point_h)
 #         result = []
 #         for dest_node in destination_candidates:
 #             if (min_dist[dest_node] == min_dist[point_g] + min_dist_start_g[point_h] + min_dist_start_h[dest_node]) \
@@ -82,7 +82,7 @@
 
 # import heapq
 #
-# def dijkstra(start_node):
+# def tak_study(start_node):
 #     distance = [int(1e9) for _ in range(vertex_num + 1)]
 #     distance[start_node] = 0
 #     q = []
@@ -108,9 +108,9 @@
 #     for node1, node2, d in lines:
 #         graph[node1].append((node2, d))
 #         graph[node2].append((node1, d))
-#     distance_at_start = dijkstra(start)
-#     distance_at_rotary1 = dijkstra(rotary1)
-#     distance_at_rotary2 = dijkstra(rotary2)
+#     distance_at_start = tak_study(start)
+#     distance_at_rotary1 = tak_study(rotary1)
+#     distance_at_rotary2 = tak_study(rotary2)
 #     for end_point in end_points:
 #         start_to_end = distance_at_start[end_point]
 #         if start_to_end == int(1e9):
