@@ -44,4 +44,58 @@ def solution():
     result = [a + b for a, b in zip(out_distance[1:], in_distance[1:])]
     return max(result)
     
-print(solution())
+    
+def solution2():
+    import heapq
+    
+    def dijkstra(node):
+        q = []
+        heapq.heappush(q, (0, node))
+        x_to_node_costs[node] = 0
+        
+        while q:
+            cur_cost, cur_node = heapq.heappop(q)
+            if x_to_node_costs[cur_node] < cur_cost:
+                continue
+            
+            for nxt_node, nxt_cost in graph[cur_node]:
+                if nxt_cost + cur_cost < x_to_node_costs[nxt_node]:
+                    x_to_node_costs[nxt_node] = nxt_cost + cur_cost
+                    q.append((nxt_cost + cur_cost, nxt_node))
+    
+    def dijkstra2(node):
+        q = []
+        heapq.heappush(q, (0, node))
+        node_to_x_costs[node] = 0
+        
+        while q:
+            cur_cost, cur_node = heapq.heappop(q)
+            if node_to_x_costs[cur_node] < cur_cost:
+                continue
+            
+            for prev_node, prev_cost in in_graph[cur_node]:
+                if prev_cost + cur_cost < node_to_x_costs[prev_node]:
+                    node_to_x_costs[prev_node] = prev_cost + cur_cost
+                    q.append((prev_cost + cur_cost, prev_node))
+        
+        
+    N, M, X = map(int, input().split())
+    
+    graph = [[] for _ in range(N + 1)]
+    in_graph = [[] for _ in range(N + 1)] # 이것을 만들어서 확인할 수 있겠다는 생각을 잠깐 못했다.
+    for _ in range(M):
+        s, e, c = map(int, input().split())
+        graph[s].append((e, c))
+        in_graph[e].append((s, c))
+    
+    INF = int(1e9)
+    x_to_node_costs = [INF] * (N + 1)
+    node_to_x_costs = [INF] * (N + 1) # 이것도 어쨋든 한점과 여러점의 차이잖아?
+    dijkstra(X) # 먼저 X에서 모든 점까지의 비용을 구한다.
+    dijkstra2(X)
+    total = [c1 + c2 for c1, c2 in zip(x_to_node_costs[1:], node_to_x_costs[1:])]
+    print(max(total))
+    
+        
+solution2()
+
