@@ -45,4 +45,55 @@ def solution():
             print(" ".join(map(str, path)))
             
             
-solution()
+def solution2():
+    n = int(input())
+    m = int(input())
+    bus_infos = [list(map(int, input().split())) for _ in range(m)]
+    
+    # 모든 점에서 모든 점까지의 최소 비용을 구해야하니까 플로이드 워샬 알고리즘이 적절하다.
+    # 최소비용 경로에 포함되어 있는 도시의 수, 그리고 그 경로를 나란히 출력한다
+    INF = int(1e9)
+    cost_board = [[INF] * (n + 1) for _ in range(n + 1)]
+    path_board = [[INF] * (n + 1) for _ in range(n + 1)] # 이것을 처음에 무엇으로 초기화하지?
+    
+    # 먼저 단일로 갈 수 있는 비용을 넣어준다.
+    for start, end, cost in bus_infos:
+        if cost_board[start][end] > cost:
+            cost_board[start][end] = cost
+            path_board[start][end] = end
+    
+    for k in range(1, n + 1):
+        for i in range(1, n + 1):
+            for j in range(1, n + 1):
+                if i == j or i == k or j == k:
+                    continue
+                if cost_board[i][j] > cost_board[i][k] + cost_board[k][j]:
+                    cost_board[i][j] = cost_board[i][k] + cost_board[k][j]
+                    path_board[i][j] = path_board[i][k]
+    
+                
+    # 이제 첫번째 결과를 출력한다.
+    for i in range(1, n + 1):
+        out = ""
+        for j in range(1, n + 1):
+            out += (str(cost_board[i][j]) if cost_board[i][j] != INF else "0") + " "
+        print(out[:-1])
+    
+    # 이제 경로를 출력해보자.
+    for i in range(1, n + 1):
+        for j in range(1, n + 1):
+            # 이제 i에서 j까지 가는 경로를 모두 출력해야한다.
+            # 경로를 복원해야하는데...
+            if cost_board[i][j] == INF:
+                print(0)
+                continue
+            # 이제 길이 있다면 출력한다.
+            out = [1, i]
+            n_i = i
+            while n_i != j:
+                n_i = path_board[n_i][j]
+                out.append(n_i)
+            out[0] = len(out) - 1
+            print(" ".join(map(str, out)))
+                
+solution2()
