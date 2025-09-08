@@ -91,3 +91,52 @@ def solution(key, lock):
         if check(rotated_key, lock):
             return True
     return False
+
+
+# 2번째 풀이다.
+from typing import *
+
+def rotate90(matrix: List[List[int]]) -> List[List[int]]:
+    return [list(row[::-1]) for row in zip(*matrix)]
+
+# 행렬의 상하좌우로 n크기만큼 확장시킨다.
+def expand_matrix(matrix, n) -> List[List]:
+    prev_size = len(matrix)
+    expanded_size = prev_size + n * 2
+    expanded_matrix = [[0] * expanded_size for _ in range(expanded_size)]
+    for i in range(prev_size):
+        for j in range(prev_size):
+            expanded_matrix[n + i][n + j] = matrix[i][j]
+    return expanded_matrix
+
+def match(key: List[List], lock: List[List]) -> bool:
+    # 슬라이딩 윈도우는포인터를 가지고 했다. 그러면 2차원도 포인터를 이용하자.
+    key_size = len(key)
+    lock_size = len(lock)
+    expanded_key = expand_matrix(key, lock_size)
+    # key size만큼 잘라내가면서 확인해야한다.
+    for i in range(lock_size + key_size):
+        for j in range(lock_size + key_size):
+            match = True
+            for s in range(lock_size):
+                for c in range(lock_size):
+                    if expanded_key[i + s][j + c] == lock[s][c]:
+                        match = False
+            if match == True:
+                return True
+    return False
+
+        
+def solution2(key, lock):
+    key_lst = [key]
+    for _ in range(3):
+        rotated_key = rotate90(key)
+        key_lst.append(rotated_key)
+        key = rotated_key
+    
+    for _key in key_lst:
+        # key와 lock이 매칭되는지 안되는지 체크하면 된다.
+        if match(_key, lock):
+            return True
+    return False
+    
