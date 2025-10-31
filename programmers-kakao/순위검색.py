@@ -102,3 +102,41 @@ def generate_keys(lang, role, pos, food):
             for p in [pos, "-"]:
                 for f in [food, "-"]:
                     yield l + r + p + f
+
+
+# 혼자서 최종적으로 풀었지만 시간이 한시간정도 걸렸다.
+def solution4(infos, queries):
+    import bisect
+
+    languages = ["cpp", "java", "python", "-"]
+    positions = ["backend", "frontend", "-"]
+    experience = ["junior", "senior", "-"]
+    soul_foods = ["chicken", "pizza", "-"]
+    
+    dp = {lang: {pos: {exp: {food: [] for food in soul_foods}
+                       for exp in experience}
+                 for pos in positions}
+          for lang in languages}
+    
+    new_infos = [info.split(" ") for info in infos]
+    new_infos.sort(key = lambda info: int(info[4]))
+    
+    for lang, pos, exp, food, score in new_infos:
+        # 여기서 32가지의 케이스에 대해서 포함될 수 있다.
+        for l in [lang, "-"]:
+            for p in [pos, "-"]:
+                for e in [exp, "-"]:
+                    for f in [food, "-"]:
+                        dp[l][p][e][f].append(int(score))
+        
+    answers = []
+    for query in queries:
+        l, p, e, last = query.split(" and ")
+        f, s = last.split(" ")
+        
+        # 여기서 점수가 s이상의 수를 구해야한다.
+        lst = dp[l][p][e][f]
+        i = bisect.bisect_left(lst, int(s))
+        answers.append(len(lst) - i)
+        
+    return answers   
