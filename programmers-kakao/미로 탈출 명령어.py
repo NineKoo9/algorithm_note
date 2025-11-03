@@ -38,3 +38,68 @@ def solution(n, m, x, y, r, c, k):
     dfs(start, k, "")
     result.sort()
     return result[0] if result else "impossible"
+
+
+from collections import deque
+
+def solution2(n, m, r1, c1, r2, c2, k):
+    # 먼저 못가는 경우
+    diff = k - abs(r2 - r1) - abs(c2 - c1)
+    if diff % 2 != 0 or diff < 0: # 아에 못가는 경우도 고려해야하군...
+        return "impossible"
+    
+    # 이제 갈 수 있는 경우
+    orders = ["d", "l", "r", "u"]
+    dr = [1, 0, 0, -1]
+    dc = [0, -1, 1, 0]
+    
+    q = deque()
+    q.append((r1, c1, k, ""))
+    visited = [[[0] * (m + 1) for _ in range(n + 1)] for i in range(k + 1)]
+    visited[k][r1][c1] = 1
+    while q:
+        r, c, count, path = q.popleft()
+        
+        if r == r2 and c == c2 and count == 0:
+            return path
+        
+        for i in range(4):
+            nr = r + dr[i]
+            nc = c + dc[i]
+            if (not (0 < nr <= n and 0 < nc <= m)) or count <= 0 or visited[count - 1][nr][nc]:
+                continue
+            visited[count - 1][nr][nc] = 1
+            q.append((nr, nc, count - 1, path + orders[i]))
+    
+# 이건 제미니 풀이다.
+def solution3(n, m, r1, c1, r2, c2, k):
+    # 1. 시작부터 불가능한 경우 판별
+    manhattan_dist = abs(r1 - r2) + abs(c1 - c2)
+    if (k - manhattan_dist) % 2 != 0 or k < manhattan_dist:
+        return "impossible"
+
+    # 2. 그리디 탐색 시작
+    path = []
+    cr, cc = r1, c1  # 현재 위치 (current row, current col)
+    
+    # 방향 우선순위: d, l, r, u
+    dr = [1, 0, 0, -1]
+    dc = [0, -1, 1, 0]
+    orders = ["d", "l", "r", "u"]
+
+    for moves_left in range(k, 0, -1):
+        for i in range(4):
+            nr, nc = cr + dr[i], cc + dc[i]
+
+            # 맵을 벗어나는지 확인
+            if not (1 <= nr <= n and 1 <= nc <= m):
+                continue
+
+            # '가능한 이동'인지 확인
+            dist_to_target = abs(nr - r2) + abs(nc - c2)
+            if dist_to_target <= moves_left - 1 and (moves_left - 1 - dist_to_target) % 2 == 0:
+                path.append(orders[i])
+                cr, cc = nr, nc
+                break # 최적의 방향을 찾았으므로 다음 이동으로 넘어감
+    
+    return "".join(path)
