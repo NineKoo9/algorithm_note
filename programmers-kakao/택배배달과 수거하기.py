@@ -49,3 +49,22 @@ def solution2(cap, n, deliveries, pickups):
 
     return answer
 
+
+# 솔직히 재미니한테 가이드학습 받으면서 문제를 해결해나갔다...
+def solution(cap, n, deliveries, pickups):
+    total_delivery = 0
+    total_pickup = 0
+    
+    answer = 0
+    for i in reversed(range(n)):
+        d = deliveries[i]
+        p = pickups[i]
+        
+        total_delivery += d
+        total_pickup += p
+        
+        while(total_delivery > 0 or total_pickup > 0):
+            total_delivery -= cap
+            total_pickup -= cap
+            answer += (i + 1) * 2
+    return answer
