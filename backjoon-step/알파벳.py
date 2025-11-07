@@ -38,5 +38,48 @@ def solution():
 
     print(max_dist)
 
+answer = 0
+def solution2():
+    from string import ascii_letters
 
-solution()
+    global answer
+
+    def dfs(r, c, l):
+        global answer
+
+        answer = max(answer, l)
+        
+
+        for i in range(4):
+            nr = r + dr[i]
+            nc = c + dc[i]
+            
+            # 범위를 벗어난 경우
+            if not (0 <= nr < R and 0 <= nc < C):
+                continue
+
+            # 방문했던 알파벳은 제외한다.
+            value = board[nr][nc]
+            if visited[value]:
+                continue
+
+            visited[value] = 1
+            dfs(nr, nc, l + 1)
+            visited[value] = 0
+
+
+
+    # 최대 몇 칸을 지나는지 알고자 한다.
+    R, C = map(int, input().split())
+    board = [input() for _ in range(R)]
+
+    dr = [0, 0, 1, -1]
+    dc = [1, -1, 0, 0]
+
+    visited = {ch: 0 for ch in ascii_letters}
+    start_value = board[0][0]
+    visited[start_value] = 1
+    dfs(0, 0, 1)
+    print(answer)
+
+solution2()
