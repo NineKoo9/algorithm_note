@@ -38,6 +38,26 @@ def solution2():
 
         print(result)
 
+def solution3():
+    import heapq
+
+    # 최소한 몇번의 비교가 필요한지 구해야한다.
+    N = int(input())
+    cards = [int(input()) for _ in range(N)]
+
+    # a < b < c 이 순서가 항상 보장되어야 한다.
+    # 아 이거 누적 덧셈 어케 할지 계속 막히네... 구현이...
+    if len(cards) == 1:
+        print(0)
+    else:
+        heapq.heapify(cards)
+        answer = 0
+        while len(cards) > 1:
+            prev = heapq.heappop(cards)
+            cur = heapq.heappop(cards)
+            answer += prev + cur
+            heapq.heappush(cards, prev + cur)
+        print(answer)
 
 
-solution()
+solution3()
