@@ -20,5 +20,42 @@ def solution():
                 min_value = min(min_value, dp[ch][-1][j])
     print(min_value)
 
+def solution2():
+    def dfs(start_color, prev_color, curr_house_idx):
 
-solution()
+        # 마지막 집까지 도달한 경우
+        if curr_house_idx == N:
+            return 0
+        
+        if dp[start_color][prev_color][curr_house_idx] != -1:
+            return dp[start_color][prev_color][curr_house_idx]
+        
+        cost = int(1e9)
+
+        for curr_color, cur_house_cost in enumerate(house_costs[curr_house_idx]):
+            if prev_color == curr_color:
+                continue
+            
+            # 만약 마지막 집이라면, 첫번째 집과 같으면 안된다.
+            if curr_house_idx == N - 1 and start_color == curr_color:
+                continue
+
+            next_cost = dfs(start_color, curr_color, curr_house_idx + 1)
+            cost = min(cost, cur_house_cost + next_cost)
+        dp[start_color][prev_color][curr_house_idx] = cost
+        return cost
+
+    N = int(input())
+    house_costs = [list(map(int, input().split())) for _ in range(N)]
+    INF = int(1e9)
+
+    # dp[start_color][prev_color][curr_house_idx] 의 최소를 저장한다.
+    dp = [[[-1 for _ in range(N)] for _ in range(3)] for _ in range(3)]
+    
+    answer = INF
+    for start_color in range(3):
+        answer = min(answer, house_costs[0][start_color] + dfs(start_color, start_color, 1))
+
+    print(answer)
+
+solution2()
