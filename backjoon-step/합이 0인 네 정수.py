@@ -57,4 +57,35 @@ def solution2():
 
     print(count)
 
-solution2()
+# 이 방식은 별로고... 시간초과가 나타난다. 투 포인터를 이용할 수 있다.
+def solution3():
+    from bisect import bisect_right, bisect_left
+
+    n = int(input())  # 최대 4000개
+    input_arrs = [list(map(int, input().split())) for _ in range(n)]
+
+    # board[0] = A, board[1] = B, board[2] = C, board[3] = D
+    board = list(zip(*input_arrs))
+
+    first_sum_lst = []
+    second_sum_lst = []
+    for i in range(n):
+        for j in range(n):
+            A = board[0]
+            B = board[1]
+            C = board[2]
+            D = board[3]
+            first_sum_lst.append(A[i] + B[j])
+            second_sum_lst.append(C[i] + D[j])
+    
+    second_sum_lst.sort()
+    print(second_sum_lst)
+    answer = 0
+    for a_sum_b in first_sum_lst:
+        target = -1 * a_sum_b
+        # second_sum_lst에서 target의 갯수를 구해야한다.
+        count = bisect_right(second_sum_lst, target) - bisect_left(second_sum_lst, target)
+        answer += count
+    print(answer)
+
+solution3()
