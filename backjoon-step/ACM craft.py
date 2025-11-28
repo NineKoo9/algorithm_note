@@ -67,6 +67,31 @@ def solution2():
         dp = [-1] * N
         print(dfs(dest))
 
+def solution3():
+    def dfs(node):
+        if dp[node] != -1:
+            return dp[node]
 
+        cost = D[node]
+        n_cost = 0
+        for n_node in graph[node]:
+            n_cost = max(n_cost, dfs(n_node))
+        dp[node] = cost + n_cost
+        return dp[node]
 
-solution2()
+    T = int(input())
+    for _ in range(T):
+        N, K = map(int, input().split())  # N: 건물의 갯수, K: 건설순서 규칙 갯수
+        D = list(map(int, input().split()))  # 각 건물을 짓는데 걸리는 시간
+        orders = [list(map(lambda n: int(n) - 1, input().split())) for _ in range(K)]
+        W = int(input()) - 1
+
+        # 0번이 지어진다음 1번이 지어져야한다. 그렇다면 그래프는 거꾸로 들어오는 녀석들을 넣어야한다.
+        dp = [-1] * N
+        graph = [[] for _ in range(N)]
+        for x, y in orders:
+            graph[y].append(x)
+
+        print(dfs(W))
+
+solution3()
