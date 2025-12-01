@@ -60,4 +60,34 @@ def solution2():
         else:
             print(0)
 
-solution2()
+def solution3():
+    N = int(input())  # 1~2000
+    written_numbers = list(map(int, input().split()))
+    M = int(input())  # 1 ~ 100만개
+    questions = [list(map(lambda s: int(s) - 1, input().split())) for _ in range(M)]
+
+    # written 숫자들에 대해서 한번에 구간별로 탐색하면 펠린드롬인지 판별가능해야한다.
+    # 팰린드롬이란 대칭인 수열이다.
+    # 100만개의 질문에 대해서 한번에 펠린드롬인지 답할 수 있어야한다.
+
+    # is_palindrome[a][b] = [a, b) 구간에 대해서 필렌드롬인지 확인하는 것
+    is_palindrome = [[False] * (N + 1) for _ in range(N)]
+
+    for l in range(1, N + 1):
+        for s in range(N - l + 1):
+            e = s + l
+            if l == 1:
+                is_palindrome[s][e] = True
+            elif l == 2:
+                is_palindrome[s][e] = True if written_numbers[s] == written_numbers[e - 1] else False
+            else:
+                if written_numbers[s] == written_numbers[e - 1] and is_palindrome[s + 1][e - 1]:
+                    is_palindrome[s][e] = True
+
+    for s, e in questions:
+        if is_palindrome[s][e + 1]:
+            print(1)
+        else:
+            print(0)
+
+solution3()
