@@ -56,4 +56,18 @@ def solution3():
     print(dp[0])
     print(max(max(dp[1]), max(dp[0])))
 
-solution3()
+def solution4():
+    N = int(input())
+    A = list(map(int, input().split()))
+    
+    INF = int(1e9)
+    # 약간 그런 고민이 생가는 군... i번째가 있는 경우 없는 경우로 갈것이냐 아니면 하나가 제거된 경우로 갈것이냐...
+    # 그냥 후자로 가면 되는군
+    dp = [[-INF for _ in range(N)], [A[i] for i in range(N)]] # dp[0][i]은 하나가 제거된 경우, dp[1][i]는 제거되지 않은 경우
+    
+    for i in range(1, N):
+        dp[0][i] = max(dp[0][i - 1] + A[i], A[i], dp[1][i - 1]) # 제거된 경우라면? 앞부분에서 제거되었거나, i번째에서 제거되는 경우다.
+        dp[1][i] = max(dp[1][i], dp[1][i - 1] + A[i]) # 제거되지 않은 경우라면 i-1도 제거되지 않은 경우여야 한다.
+    print(max(max(dp[0]), max(dp[1])))
+
+solution4()

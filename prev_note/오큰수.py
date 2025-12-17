@@ -49,5 +49,17 @@ def solution2():
     # 이런 경우는 시간 복잡도를 n * (n/2)라고 볼수 있구나... (n/2)는 이중포문 안의 평균적인 값..?
     # 내가 이게 잘 안되는 것 같다. 처음에는 아무런게 없으니까 일정이상은 if나 while이 무시되며 for문이 돌아갈텐데 그걸 구조적으로 설계가 쉽지 않군
 
+def solution4():
+    N = int(input())
+    A = list(map(int, input().split()))
+    
+    stack = []
+    NGE = [-1 for _ in range(N)]
+    for i in range(N):
+        while stack and A[stack[-1]] < A[i]:
+            prevIdx = stack.pop()
+            NGE[prevIdx] = A[i]
+        stack.append(i)
+    print(*NGE)
 
-solution2()
+solution4()
