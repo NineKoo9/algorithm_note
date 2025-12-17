@@ -41,5 +41,40 @@ def solution():
     answer_node, answer_dist = get_max_node(node, 0)
     print(answer_dist if start != answer_node else dist)
 
+def solution2():
+    def find_farthest_vertex(v):
+        visited[v] = True
 
-solution()
+        farthest_vertex = v
+        farthest_dist = 0
+        for n_v, n_dist in graph[v]:
+            if visited[n_v]:
+                continue
+            
+            n_farthest_vertex, n_farthest_dist = find_farthest_vertex(n_v)
+            if farthest_dist < n_dist + n_farthest_dist:
+                farthest_dist = n_dist + n_farthest_dist
+                farthest_vertex = n_farthest_vertex
+        
+        return farthest_vertex, farthest_dist
+
+    V = int(input())  # 이것의 최대가 10만개란 말이다.
+    lines = [list(map(int, input().split())) for _ in range(V)]
+
+    # initialize graph
+    graph = [[] for _ in range(V + 1)]
+    for line in lines:
+        vertex1 = line[0]
+        for i in range(1, len(line) - 1, 2):
+            vertex2, dist = line[i], line[i + 1]
+            graph[vertex1].append((vertex2, dist))
+            graph[vertex2].append((vertex1, dist))
+    
+    visited = [False for _ in range(V + 1)]
+    v1, _ = find_farthest_vertex(1)
+
+    visited = [False for _ in range(V + 1)]
+    v2, radius = find_farthest_vertex(v1)
+    print(radius)
+
+solution2()
