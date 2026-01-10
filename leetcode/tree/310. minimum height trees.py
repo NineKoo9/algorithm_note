@@ -55,3 +55,62 @@ class Solution2:
             leaf_nodes = new_leaf_nodes
         return leaf_nodes
 
+
+from collections import deque
+
+class Solution3:
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        def find_furthest_node_with_path(node: int):
+            furthest_node, furthest_dist = node, 0
+            
+            q = deque()
+            visited = [False] * n
+            parent = [i for i in range(n)]
+
+            visited[node] = True
+            q.append((node, 0))
+            while q:
+                cur_node, dist = q.popleft()
+                for n_node in graph[cur_node]:
+                    if visited[n_node]:
+                        continue
+                    visited[n_node] = True
+                    if dist + 1 >= furthest_dist:
+                        furthest_dist = dist + 1
+                        furthest_node = n_node
+                        parent[n_node] = cur_node
+                    q.append((n_node, dist + 1))
+            
+            cur = furthest_node
+            path = [furthest_node]
+            while parent[cur] != cur:
+                nxt = parent[cur]
+                path.append(nxt)
+                cur = nxt
+
+            return furthest_node, path[::-1]
+
+        if n == 1:
+            return [0]
+        if n == 2:
+            return [0, 1]
+
+        graph = [[] for _ in range(n)]
+
+        for a, b in edges:
+            graph[a].append(b)
+            graph[b].append(a)
+
+        node_a, _ = find_furthest_node_with_path(0)
+        node_b, path = find_furthest_node_with_path(node_a)
+        l = len(path)
+        if l % 2 == 0:
+            mid = l // 2
+            return [path[mid - 1], path[mid]]
+        else:
+            mid = l // 2
+            return [path[mid]]
+
+
+        
+        
