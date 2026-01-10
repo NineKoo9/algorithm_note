@@ -113,4 +113,39 @@ class Solution3:
 
 
         
+# 이건 차수를 다루는 풀이이다.
+class Solution4:
+    def findMinHeightTrees(self, n: int, edges: list[list[int]]) -> list[int]:
+        # 예외 처리: 노드가 1개일 때
+        if n == 1:
+            return [0]
         
+        # 1. 그래프(인접 리스트)와 차수(Degree) 리스트 초기화
+        graph = [[] for _ in range(n)]
+        degree = [0] * n
+        
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+            degree[u] += 1
+            degree[v] += 1
+            
+        # 2. 첫 번째 리프 노드들(차수가 1인 노드)을 큐에 담기
+        leaves = deque([i for i in range(n) if degree[i] == 1])
+        
+        # 3. 리프 노드 깎기 (남은 노드가 2개 이하가 될 때까지 반복)
+        remaining_nodes = n
+        while remaining_nodes > 2:
+            leaves_count = len(leaves)
+            remaining_nodes -= leaves_count # 현재 단계에서 제거할 리프 노드 수만큼 감소
+            
+            for _ in range(leaves_count):
+                leaf = leaves.popleft()
+                
+                # 리프 노드와 연결된 이웃 노드 처리
+                for neighbor in graph[leaf]:
+                    degree[neighbor] -= 1 # 간선을 끊는 대신 차수만 감소
+                    if degree[neighbor] == 1:
+                        leaves.append(neighbor)
+                        
+        return list(leaves)
