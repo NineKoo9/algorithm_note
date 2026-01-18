@@ -10,4 +10,10 @@ def solution():
     answer = round(abs(answer) / 2, 1)
     print(answer)
 
-solution()
+def solution2():
+    N = int(input())
+    points = [list(map(int, input().split())) for _ in range(N)]
+    
+    pass
+
+solution2()
