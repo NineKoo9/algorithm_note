@@ -52,4 +52,42 @@ def solution():
 
     print(safe_zone_count)
 
-solution()
+
+def solution2():
+    def dfs_cycle_check(y, x):
+        nonlocal cycle_count
+        # 만약 방문했는데 현재의 path내에 있는 녀석이라면? 사이클을 이룬다. 그렇다면 사이클을 체크하고, 탐색을 종료해도 된다.
+        if (y, x) in path:
+            cycle_count += 1
+            return
+        if visited[y][x]:
+            return
+        path.add((y, x))
+        visited[y][x] = True
+        
+        dy, dx = directions[board_info[y][x]]
+        n_y, n_x = y + dy, x + dx
+        dfs_cycle_check(n_y, n_x)
+    
+    N, M = map(int, input().split())
+    board_info = [list(input()) for _ in range(N)]
+    directions = {"U": (-1, 0), "D": (1, 0), "L": (0, -1), "R": (0, 1)}
+    
+    # 자세히 보니까... 사이클의 갯수를 확인하면 될 것 같은 느낌이다.
+    # 그것으로 충분한가? 만약 사이클에 포함되지 않는 것이라면... 어떤 점들이 그냥 사이클에 일방적으로 연결되어 있다면 결국 사이클에 합류한다 그러면? 사이클에 역시 한 곳만 두면 되는 것이다.
+    
+    cycle_count = 0
+    visited = [[False] * M for _ in range(N)]
+    
+    for i in range(N):
+        for j in range(M):
+            if visited[i][j]:
+                continue
+            # 여기서 dfs로 탐색하면서 사이클을 체크할 필요가 있다.
+            path = set()
+            dfs_cycle_check(i, j)
+    
+    safe_zone_count = cycle_count
+    print(safe_zone_count)
+
+solution2()
